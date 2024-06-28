@@ -24,3 +24,8 @@ const MESSAGE_SYNC_REQUEST = MessageType(252)
 const MESSAGE_SYNC_COMPLETE = MessageType(253)
 const MESSAGE_SYNC_REQUEST_LITE = MessageType(254)
 const MESSAGE_UNKNOWN = MessageType(255)
+
+type Message struct {
+	Type MessageType
+	Data []byte
+}

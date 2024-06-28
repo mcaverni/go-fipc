@@ -1,6 +1,9 @@
 package base
 
-import "fmt"
+import (
+	"encoding/binary"
+	"fmt"
+)
 
 type ChannelType uint8
 
@@ -69,22 +72,12 @@ type ChannelId struct {
 	Channel int32 // channel ID
 }
 
-func (i ChannelId) ToBytes() ([]byte, error) {
-	// TODO: implement
-	return make([]byte, 10), fmt.Errorf("not implemented")
-}
-
 func (i ChannelId) ToString() (string, error) {
 	s, e := ChannelTypeToString(i.Type)
 	if e != nil {
 		return "", e
 	}
 	return fmt.Sprintf("%d %s %d", i.Address, s, i.Channel), nil
-}
-
-func BytesToChannelId(b []byte) (ChannelId, error) {
-	// TODO: implement
-	return ChannelId{}, fmt.Errorf("not implemented")
 }
 
 func StringToChannelId(s string) (ChannelId, error) {
@@ -99,4 +92,34 @@ func StringToChannelId(s string) (ChannelId, error) {
 		return ChannelId{}, err
 	}
 	return ChannelId{ty, ad, ch}, nil
+}
+
+func NoChannelId() ChannelId {
+	return ChannelId{CHANNEL_NONE, -1, -1}
+}
+
+func (i ChannelId) IsNone() bool {
+	return i.Type == CHANNEL_NONE && i.Address == -1 && i.Channel == -1
+}
+
+func (i ChannelId) IsValid() bool {
+	return !i.IsNone()
+}
+
+func (i ChannelId) MarshalBinary() ([]byte, error) {
+	bs := make([]byte, 3*binary.Size(uint32(0)))
+	binary.LittleEndian.PutUint32(bs[0:], uint32(i.Type))
+	binary.LittleEndian.PutUint32(bs[4:], uint32(i.Address))
+	binary.LittleEndian.PutUint32(bs[8:], uint32(i.Channel))
+	return bs, nil
+}
+
+func (i *ChannelId) UnmarshalBinary(bs []byte) error {
+	if len(bs) != 3*binary.Size(uint32(0)) {
+		return fmt.Errorf("invalid ChannelId binary length: %d", len(bs))
+	}
+	i.Type = ChannelType(binary.LittleEndian.Uint32(bs[0:]))
+	i.Address = int32(binary.LittleEndian.Uint32(bs[4:]))
+	i.Channel = int32(binary.LittleEndian.Uint32(bs[8:]))
+	return nil
 }

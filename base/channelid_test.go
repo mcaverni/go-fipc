@@ -22,16 +22,29 @@ func TestStrings(t *testing.T) {
 
 func TestBytes(t *testing.T) {
 	// test equivalcence between these two
-	// const id_bytes [6]byte = [6]byte{0, 1, 15, 0, 0, 0}
-	id_value := ChannelId{CHANNEL_ANALOG_INPUT, 1, 15}
+	chan_id := ChannelId{CHANNEL_ANALOG_INPUT, 1, 15}
 
-	b, e := id_value.ToBytes()
-	if e != nil {
-		t.Error("ChannelId.ToBytes() failed", e)
+	byte_array, err := chan_id.MarshalBinary()
+	if err != nil {
+		t.Error("ChannelId.ToBytes() failed", err)
 	}
 
-	c, e := BytesToChannelId(b)
-	if e != nil || c != id_value {
-		t.Error("BytesToChannelId() failed:", e)
+	c := ChannelId{}
+	err = c.UnmarshalBinary(byte_array)
+	if err != nil || c != chan_id {
+		t.Error("BytesToChannelId() failed:", err)
+	}
+}
+
+func TestInvalid(t *testing.T) {
+	// test invalid channel type
+	nochan := NoChannelId()
+	if nochan.IsValid() {
+		t.Error("NoChannelId.IsValid() failed")
+	}
+
+	yeschan := ChannelId{CHANNEL_ANALOG_INPUT, 1, 15}
+	if !yeschan.IsValid() {
+		t.Error("ChannelId.IsValid() failed")
 	}
 }
