@@ -1,29 +1,21 @@
 package base
 
-import "fmt"
-
 type Value interface {
-	FromBytes([]byte) (Value, error)
-	ToBytes() ([]byte, error)
+	MarshalBinary() ([]byte, error)
+	UnmarshalBinary([]byte) error
 }
 
 type ValueInt int32
-type ValueFloat float32 // TODO: implement type functions
-type ValueString string // TODO: implement type functions
-type ValueBool bool     // TODO: implement type functions
-type ValueChar rune     // TODO: implement type functions
+type ValueFloat float32
+type ValueString string
+type ValueBool bool
+type ValueChar rune
 
-func (v ValueInt) FromBytes(b []byte) (Value, error) {
-	// TODO: implement
-	return ValueInt(0), fmt.Errorf("not implemented")
+func (v ValueInt) MarshalBinary() ([]byte, error) {
+	return []byte{byte(v >> 24), byte(v >> 16), byte(v >> 8), byte(v)}, nil
 }
 
-func (v ValueInt) ToBytes() (b []byte, e error) {
-	// TODO: implement
-	return make([]byte, 10), fmt.Errorf("not implemented")
-}
-
-func BytesToValue(b []byte) (Value, error) {
-	// TODO: implement
-	return Value(nil), fmt.Errorf("not implemented")
+func (v *ValueInt) UnmarshalBinary(b []byte) error {
+	*v = ValueInt(int32(b[0])<<24 | int32(b[1])<<16 | int32(b[2])<<8 | int32(b[3]))
+	return nil
 }

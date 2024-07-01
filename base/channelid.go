@@ -52,7 +52,7 @@ func StringToChannelType(s string) (ChannelType, error) {
 		return CHANNEL_COMMAND, nil
 	case "alarm":
 		return CHANNEL_EVENT, nil
-	case "SETUP":
+	case "setup":
 		return CHANNEL_SETUP, nil
 	case "digin":
 		return CHANNEL_DIGITAL_INPUT, nil

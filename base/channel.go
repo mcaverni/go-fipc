@@ -3,16 +3,17 @@ package base
 import "fmt"
 
 type Channel struct {
-	Id       ChannelId
-	Name     string
-	Value    Value
-	Max      Value
-	Min      Value
-	Default  Value
-	Unit     Unit
-	Visible  Condition
-	Disabled Condition
-	Change   Condition
+	Id          ChannelId
+	Name        string
+	Description string
+	Value       Value
+	Max         Value
+	Min         Value
+	Default     Value
+	Unit        Unit
+	Visible     Condition
+	Disabled    Condition
+	Change      Condition
 }
 
 func (c Channel) ToBytes() ([]byte, error) {
