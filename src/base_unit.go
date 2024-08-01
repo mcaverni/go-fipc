@@ -1,4 +1,4 @@
-package base
+package gofipc
 
 type Unit struct {
 	Name string

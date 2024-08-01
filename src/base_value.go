@@ -1,4 +1,4 @@
-package base
+package gofipc
 
 type Value interface {
 	MarshalBinary() ([]byte, error)

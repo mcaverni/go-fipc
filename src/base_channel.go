@@ -1,4 +1,4 @@
-package base
+package gofipc
 
 import "fmt"
 
