@@ -8,6 +8,12 @@ import (
 type Value interface {
 	MarshalBinary() ([]byte, error)
 	UnmarshalBinary([]byte) error
+	// TODO: implement those
+	ToInt() (ValueInt, error)
+	ToFloat() (ValueFloat, error)
+	ToString() (ValueString, error)
+	ToBool() (ValueBool, error)
+	ToChar() (ValueChar, error)
 }
 
 type ValueInt int32
