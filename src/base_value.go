@@ -34,6 +34,26 @@ func (v *ValueInt) UnmarshalBinary(b []byte) error {
 	return nil
 }
 
+func (v ValueInt) ToInt() (ValueInt, error) {
+	return v, nil
+}
+
+func (v ValueInt) ToFloat() (ValueFloat, error) {
+	return ValueFloat(v), nil
+}
+
+func (v ValueInt) ToString() (ValueString, error) {
+	return ValueString(fmt.Sprintf("%d", v)), nil
+}
+
+func (v ValueInt) ToBool() (ValueBool, error) {
+	return ValueBool(v != 0), nil
+}
+
+func (v ValueInt) ToChar() (ValueChar, error) {
+	return ValueChar(v), nil
+}
+
 func (v ValueFloat) MarshalBinary() ([]byte, error) {
 	i := math.Float32bits(float32(v))
 	return []byte{byte(i >> 24), byte(i >> 16), byte(i >> 8), byte(i)}, nil
